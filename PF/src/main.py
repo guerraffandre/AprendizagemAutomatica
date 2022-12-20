@@ -1,59 +1,72 @@
 from createData import ImportData, ReadJson
 import time
+from datetime import date, datetime
 import numpy as np
 import matplotlib.pyplot as plt
 from models.DataToShow import DataToShow
 
+Y = 2000
+seasons = [('winter', (date(Y,  1,  1),  date(Y,  3, 20))),
+           ('spring', (date(Y,  3, 21),  date(Y,  6, 20))),
+           ('summer', (date(Y,  6, 21),  date(Y,  9, 22))),
+           ('autumn', (date(Y,  9, 23),  date(Y, 12, 20))),
+           ('winter', (date(Y, 12, 21),  date(Y, 12, 31)))]
+
+def get_season(now):
+    if isinstance(now, datetime):
+        now = now.date()
+    now = now.replace(year=Y)
+    return next(season for season, (start, end) in seasons if start <= now <= end)
+
 maxRowsToRead = 100
-
-
         
 #if __name__ == '__main__':
-data = ReadJson()
+regAcidentes = ReadJson()
 
 dataToGraphMain = []        
 maxRowsToReadAux = 0
-for dado in data:
-    dataToGraphHasType = False
-    maxRowsToReadAux += 1
-    if maxRowsToReadAux == 100:
-        break
-    
-    for typeDataAux2 in dataToGraphMain:
-        if typeDataAux2.tipoAcidente == dado.condutoresVeiculos[0].InfCompaAcçõeseManobras:
-            dataToGraphHasType = True
-                
-    if dataToGraphHasType == False:
-        aux = DataToShow()
-        aux.tipoAcidente = dado.condutoresVeiculos[0].InfCompaAcçõeseManobras
-        #inverno
-        if "1000:12:22 00:00:00" < dado.condutoresVeiculos[0].Datahora < "3000:03:21 23:59:59":
-            aux.countEstacoes[0] += 1
-        #primavera  
-        elif "1000:03:22 00:00:00" < dado.condutoresVeiculos[0].Datahora < "3000:06:21 23:59:59":
-            aux.countEstacoes[1] += 1
-        #verao  
-        elif "1000:06:22 00:00:00" < dado.condutoresVeiculos[0].Datahora < "3000:09:22 23:59:59":
-            aux.countEstacoes[2] += 1
-        #outono  
-        elif "1000:09:23 00:00:00" < dado.condutoresVeiculos[0].Datahora < "3000:12:21 23:59:59":
-            aux.countEstacoes[3] += 1
-        dataToGraphMain.append(aux)
-    else:            
-        for typeDataAux in dataToGraphMain:                
-            if typeDataAux.tipoAcidente == dado.condutoresVeiculos[0].InfCompaAcçõeseManobras:
-                #inverno
-                if "1000:12:22 00:00:00" < dado.condutoresVeiculos[0].Datahora < "3000:03:21 23:59:59":
-                    typeDataAux.countEstacoes[0] += 1
-                #primavera  
-                elif "1000:03:22 00:00:00" < dado.condutoresVeiculos[0].Datahora < "3000:06:21 23:59:59":
-                    typeDataAux.countEstacoes[1] += 1
-                #verao  
-                elif "1000:06:22 00:00:00" < dado.condutoresVeiculos[0].Datahora < "3000:09:22 23:59:59":
-                    typeDataAux.countEstacoes[2] += 1
-                #outono  
-                elif "1000:09:23 00:00:00" < dado.condutoresVeiculos[0].Datahora < "3000:12:21 23:59:59":
-                    typeDataAux.countEstacoes[3] += 1
+for regAcidente in regAcidentes:
+    for condutoresVeiculo in regAcidente.condutoresVeiculos:
+        dataToGraphHasType = False
+        maxRowsToReadAux += 1
+        #if maxRowsToReadAux == 100:
+        #    break
+        
+        for typeDataAux2 in dataToGraphMain:
+            if typeDataAux2.tipoAcidente == condutoresVeiculo.InfCompaAcçõeseManobras:
+                dataToGraphHasType = True
+                    
+        if dataToGraphHasType == False:
+            aux = DataToShow()
+            aux.tipoAcidente = condutoresVeiculo.InfCompaAcçõeseManobras
+            if get_season(datetime.strptime(condutoresVeiculo.Datahora, '%Y:%m:%d %H:%M:%S')) == "winter":
+                aux.countEstacoes[0] = aux.countEstacoes[0] + 1
+                aux.inverno += 1                
+            elif get_season(datetime.strptime(condutoresVeiculo.Datahora, '%Y:%m:%d %H:%M:%S')) == "spring":
+                aux.countEstacoes[1] = aux.countEstacoes[1] + 1
+                aux.primavera += 1
+            elif get_season(datetime.strptime(condutoresVeiculo.Datahora, '%Y:%m:%d %H:%M:%S')) == "summer":
+                aux.countEstacoes[2] = aux.countEstacoes[2] + 1
+                aux.verao += 1
+            elif get_season(datetime.strptime(condutoresVeiculo.Datahora, '%Y:%m:%d %H:%M:%S')) == "autumn":
+                aux.countEstacoes[3] = aux.countEstacoes[3] + 1
+                aux.outono += 1
+            dataToGraphMain.append(aux)
+        else:            
+            for typeDataAux in dataToGraphMain:                
+                if typeDataAux.tipoAcidente == condutoresVeiculo.InfCompaAcçõeseManobras:
+                    if get_season(datetime.strptime(condutoresVeiculo.Datahora, '%Y:%m:%d %H:%M:%S')) == "winter":
+                        typeDataAux.countEstacoes[0] = typeDataAux.countEstacoes[0] + 1
+                        typeDataAux.inverno += 1                
+                    elif get_season(datetime.strptime(condutoresVeiculo.Datahora, '%Y:%m:%d %H:%M:%S')) == "spring":
+                        typeDataAux.countEstacoes[1] = typeDataAux.countEstacoes[1] + 1
+                        typeDataAux.primavera += 1
+                    elif get_season(datetime.strptime(condutoresVeiculo.Datahora, '%Y:%m:%d %H:%M:%S')) == "summer":
+                        typeDataAux.countEstacoes[2] = typeDataAux.countEstacoes[2] + 1
+                        typeDataAux.verao += 1
+                    elif get_season(datetime.strptime(condutoresVeiculo.Datahora, '%Y:%m:%d %H:%M:%S')) == "autumn":
+                        typeDataAux.countEstacoes[3] = typeDataAux.countEstacoes[3] + 1
+                        typeDataAux.outono += 1
         
     
     #print(dado.condutoresVeiculos[0].InfCompaAcçõeseManobras)
