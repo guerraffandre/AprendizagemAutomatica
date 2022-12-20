@@ -1,3 +1,5 @@
-class DataToShow:
-    tipoAcidente = ""
-    count = [0,0,0,0]
+class DataToShow(object):
+    def __init__(self):
+        self.tipoAcidente = ""
+        self.countEstacoes = [0] * 4
+    
