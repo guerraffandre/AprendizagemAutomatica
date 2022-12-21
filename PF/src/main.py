@@ -72,13 +72,13 @@ for regAcidente in regAcidentes:
     #print(dado.condutoresVeiculos[0].InfCompaAcçõeseManobras)
     #dataToGraph.sort(key=lambda x: x.condutoresVeiculos[0].InfCompaAcçõeseManobras, reverse=True)
     #Datahora
-
 # Gráfico sobre notas de 3 alunos nas provas do semestre
 #1-inverno 2-primavera 3-verao 4-outono
 notas_pedro = [8, 9, 7, 8]
 notas_maria = [5, 10, 6, 9]
 notas_jose  = [7, 7, 5, 8]
 
+print()
 
 # Definindo a largura das barras
 barWidth = 0.25
@@ -91,16 +91,16 @@ r1 = np.arange(4)
 r2 = [x + barWidth for x in r1]
 r3 = [x + barWidth for x in r2]
 
-# Criando as barras
+# Criando as barras leva o tipo de acidente
 plt.bar(r1, notas_pedro, color='#6A5ACD', width=barWidth, label='Pedro')
 plt.bar(r2, notas_maria, color='#6495ED', width=barWidth, label='Maria')
 plt.bar(r3, notas_jose, color='#00BFFF', width=barWidth, label='José')
 
 # Adiciando legendas as barras
-plt.xlabel('Provas')
-plt.xticks([r + barWidth for r in range(len(notas_pedro))], ['Prova 1', 'Prova 2', 'Prova 3', 'Prova 4'])
-plt.ylabel('Notas')
-plt.title('Representação das notas de 3 alunos em 4 provas do semestre')
+plt.xlabel('Estacoes')
+plt.xticks([r + barWidth for r in range(len(notas_pedro))], ['Inverno', 'Primavera', 'Verao', 'Outono'])
+plt.ylabel('Acidentes')
+plt.title('Representação dos acidentes por estaçoes')
 
 # Criando a legenda e exibindo o gráfico
 plt.legend()
