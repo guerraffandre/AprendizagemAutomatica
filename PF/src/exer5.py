@@ -36,11 +36,29 @@ def ConvertSinaisLuminosos(carga):
     else:
         return "UNKOW"
 
+def ConvertDiaDaSemana(carga):
+    if carga == "Domingo      ":
+        return 0
+    elif carga == "Quinta-Feira ":
+        return 1
+    elif carga == "Quinta-Feira ":
+        return 2
+    elif len(carga) == 5:  #terca
+        return 3
+    elif len(carga) == 6:  #sabado
+        return 4
+    elif carga == "Segunda-Feira":
+        return 5
+    elif carga == "Sexta-Feira  ":
+        return 6
+    else:
+        return "UNKOW"
+
 regAcidentes = ReadJson()
-csvStr = "cvAnomatricula,aVelocidadelocal,cvSexo,cvIdade,aVelocidadegeral,aSinaisLuminosos\n"
+csvStr = "cvAnomatricula,aVelocidadelocal,cvSexo,cvIdade,aSinaisLuminosos,aDiadaSemana\n"
 for dado in regAcidentes:
     try:
-        x = str(int(dado.condutoresVeiculos[0].Anomatricula)) + "," + str(int(dado.acidentes[0].Velocidadelocal)) + "," + str(int(ConvertSexoToNum(dado.condutoresVeiculos[0].Sexo))) + "," + str(int(ConvertIdadeToNum(dado.condutoresVeiculos[0].Idade))) + "," + str(int(dado.acidentes[0].Velocidadelocal))+ "," + str(int(ConvertSinaisLuminosos(dado.acidentes[0].SinaisLuminosos))) + "\n"
+        x = str(int(dado.condutoresVeiculos[0].Anomatricula)) + "," + str(int(dado.acidentes[0].Velocidadelocal)) + "," + str(int(ConvertSexoToNum(dado.condutoresVeiculos[0].Sexo))) + "," + str(int(ConvertIdadeToNum(dado.condutoresVeiculos[0].Idade))) + "," + str(int(ConvertSinaisLuminosos(dado.acidentes[0].SinaisLuminosos))) + "," + str(int(ConvertDiaDaSemana(dado.acidentes[0].DiadaSemana))) +"\n"
         csvStr += x  
     except:
         a=0
