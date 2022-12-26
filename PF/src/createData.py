@@ -15,12 +15,12 @@ maxRows = 1100
 yearsToImport=["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"]#,"2011","2012","2013","2014","2015","2016","2017","2018","2019"
 
 def ReadJson():
-    with open("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/data.txt", 'r') as file:
+    with open(os.getcwd()  + "\PF\data.txt", 'r') as file:
         json_str = file.read()
         return jsonpickle.decode(json_str)
         
 def CreateJson(list):
-    with open("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/data.txt", "w") as file:
+    with open(os.getcwd()  + "\PF\data.txt", "w") as file:
         jsonpickle.set_encoder_options('json', sort_keys=True, indent=4)
         frozen = jsonpickle.encode(list, file)
         file.write(frozen)

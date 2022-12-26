@@ -8,6 +8,7 @@ from models.DataToShow import DataToShow
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 import csv
 
 def ConvertSexoToNum(sexoStr):
@@ -63,10 +64,10 @@ for dado in regAcidentes:
     except:
         a=0
 
-with open("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/exer5Data.csv", "w", encoding='utf-8') as file:
+with open(os.getcwd()  + "\PF\exer5Data.txt", "w", encoding='utf-8') as file:
     file.write(csvStr)
 
-df = pd.read_csv(r'D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/exer5Data.csv' )
+df = pd.read_csv(os.getcwd()  + "\PF\exer5Data.txt")
 
 correlations = df.corr()
 sns.heatmap(correlations)
