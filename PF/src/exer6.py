@@ -9,7 +9,7 @@ from sklearn.neighbors import NearestNeighbors
 
 coluna1 = "cvSexo"
 coluna2 = "cvIdade"
-df = pd.read_csv(os.getcwd()  + "\PF\exer5Data.txt")  
+df = pd.read_csv(os.getcwd()  + "\PF\src\data\exer5Data.txt")  
 
 ### DBscan
 x = df.loc[:, [coluna1, coluna2]].values
