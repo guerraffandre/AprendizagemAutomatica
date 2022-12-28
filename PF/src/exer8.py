@@ -1,15 +1,16 @@
 from createData import ImportData, ReadJson
-import time
-import random
-from datetime import date, datetime
 import numpy as np
 import matplotlib.pyplot as plt
-from models.DataToShow import DataToShow
-import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-import csv
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -103,7 +104,7 @@ def ConvertCaracteristicasTecnicas(carga):
     elif carga == "Auto-estrada":
         return 1
     else:
-        return 2
+        return "UNKNOW"
 
 def ConvertConducaoAderencia(carga):
     if carga == "Com água acumulada na faixa de rodagem":
@@ -136,12 +137,33 @@ for dado in regAcidentes:
     except:
         a=0
 
-with open("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/src/data/exer5Data.csv", "w", encoding='utf-8') as file:
+with open("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/src/data/exer8Data.csv", "w", encoding='utf-8') as file:
     file.write(csvStr)
 
-df = pd.read_csv("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/src/data/exer5Data.csv")
+df = pd.read_csv("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/src/data/exer8Data.csv")
 
-correlations = df.corr()
-sns.heatmap(correlations)
-plt.show()
+X_train, X_test, y_train, y_test = train_test_split(df.iloc[:, :-1], df.iloc[:,-1], test_size=0.3, random_state=1)
         
+X_train.shape, X_test.shape, y_train.shape, y_test.shape
+
+pipeline = make_pipeline(StandardScaler(), RandomForestClassifier(n_estimators=1, max_depth=100))
+
+pipeline.fit(X_train, y_train)
+
+print('Model Accuracy Test: %.2f' % pipeline.score(X_test, y_test))
+print('Model Accuracy Train: %.2f' % pipeline.score(X_train, y_train))
+
+scores = cross_val_score(pipeline, X=X_train, y=y_train, cv=2, n_jobs=1)
+
+print('CV accuracy scores: %s' % scores)
+print('CV accuracy: %.3f +/- %.3f' % (np.mean(scores),np.std(scores)))
+
+from sklearn.model_selection import StratifiedKFold
+
+kfold = StratifiedKFold(n_splits=8).split(X_train, y_train)
+scores = []
+
+'''
+for k, (train, test) in enumerate(kfold):
+    print(k, train, test)
+'''
