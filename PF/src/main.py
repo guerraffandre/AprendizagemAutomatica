@@ -8,4 +8,8 @@ from models.DataToShow import DataToShow
         
 if __name__ == '__main__':
     
-    data = ReadJson()
+    st = time.time()
+    ImportData()
+    et = time.time()
+    print(str(et - st))
+    

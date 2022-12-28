@@ -125,13 +125,93 @@ def ConvertConducaoAderencia(carga):
     else:
         return "UNKNOW"
 
+def ConvertFactoresAtmosfericos(carga):
+    if carga == "Bom tempo":
+        return 0
+    elif carga == "Chuva":
+        return 1
+    elif carga == "Granizo":
+        return 2
+    elif carga == "Neve":
+        return 3
+    elif carga == "Nevoeiro":
+        return 4
+    elif carga == "Nuvem de fumo":
+        return 5
+    elif carga == "Vento forte":
+        return 6
+    else:
+        return "UNKNOW"
+
+def ConvertNatureza(carga):
+    if carga == "Atropelamento com fuga":
+        return 0
+    elif carga == "Atropelamento de animais":
+        return 1
+    elif carga == "Atropelamento de peões":
+        return 2
+    elif carga == "Colisão choque em cadeia":
+        return 3
+    elif carga == "Colisão com fuga":
+        return 4
+    elif carga == "Colisão com outras situações":
+        return 5
+    elif carga == "Colisão com veiculo ou obstáculo na faixa de rodagem":
+        return 6
+    elif carga == "Colisão frontal":
+        return 7
+    elif carga == "Colisão lateral com outro veículo em movimento":
+        return 8
+    elif carga == "Colisão traseira com outro veículo em movimento":
+        return 9
+    elif carga == "Despiste com capotamento":
+        return 10
+    elif carga == "Despiste com colisão com veículo imobil. ou obstáculo":
+        return 11
+    elif carga == "Despiste com dispositivo de retenção":
+        return 12
+    elif carga == "Despiste com fuga":
+        return 13
+    elif carga == "Despiste com transposição do dispositivo de retenção lateral":
+        return 14
+    elif carga == "Despiste sem dispositivo de retenção":
+        return 15
+    elif carga == "Despiste simples":
+        return 16
+    else:
+        return "UNKNOW"
+
+def ConvertAcessorioPassageiros(carga):
+    if carga == "C/ capacete/ cinto segurança":
+        return 0
+    elif carga == "C/ sistema retenção de crianças":
+        return 1
+    elif carga == "S/ sistema retenção de crianças":
+        return 3
+    elif carga == "S/ uso capacete/cinto segurança":
+        return 4
+    else:
+        return "UNKNOW"
+
+def ConvertLesoes30Dias(carga):
+    if carga == "Ferido leve":
+        return 0
+    elif carga == "Morto":
+        return 1
+    elif carga == "Ferido grave":
+        return 3
+    elif carga == "Ileso":
+        return 4
+    else:
+        return "UNKNOW"
+
 
 
 regAcidentes = ReadJson()
-csvStr = "cvAnomatricula,aVelocidadelocal,aVelocidadegeral,cvSexo,cvIdade,aSinaisLuminosos,aDiadaSemana,aTipoPiso,aTipoVias,aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia,aCaracterísticasTecnicas1,aCondAderência,aNumMortosa30dias\n"
+csvStr = "cvAnomatricula,aVelocidadelocal,aVelocidadegeral,cvSexo,cvIdade,aSinaisLuminosos,aDiadaSemana,aTipoPiso,aTipoVias,aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia,aCaracterísticasTecnicas1,aCondAderência,aNumMortosa30dias,aFactoresAtmosféricos,aNatureza,pAcessóriosPassageiro,pLesõesa30dias\n"
 for dado in regAcidentes:
     try:
-        x = str(int(dado.condutoresVeiculos[0].Anomatricula)) + "," + str(int(dado.acidentes[0].Velocidadelocal)) + "," + str(int(dado.acidentes[0].Velocidadegeral)) + "," + str(int(ConvertSexoToNum(dado.condutoresVeiculos[0].Sexo))) + ","+ str(int(ConvertIdadeToNum(dado.condutoresVeiculos[0].Idade))) + "," + str(int(ConvertDiaDaSemana(dado.acidentes[0].DiadaSemana))) + "," + str(int(ConvertSinaisLuminosos(dado.acidentes[0].SinaisLuminosos))) + "," + str(int(ConvertTipoPiso(dado.acidentes[0].TipoPiso))) + ","+ str(int(ConvertTipoVias(dado.acidentes[0].TiposVias)))+ "," + str(int(dado.acidentes[0].NumFeridosgravesa30dias)) + ","  + str(int(dado.acidentes[0].NumFeridosligeirosa30dias)) + ","+ str(int(ConvertCaracteristicasTecnicas(dado.acidentes[0].CaracterísticasTecnicas1))) + ","  + str(int(ConvertConducaoAderencia(dado.acidentes[0].CondAderência))) + ","+ str(int(dado.acidentes[0].NumMortosa30dias)) +"\n"
+        x = str(int(dado.condutoresVeiculos[0].Anomatricula)) + "," + str(int(dado.acidentes[0].Velocidadelocal)) + "," + str(int(dado.acidentes[0].Velocidadegeral)) + "," + str(int(ConvertSexoToNum(dado.condutoresVeiculos[0].Sexo))) + ","+ str(int(ConvertIdadeToNum(dado.condutoresVeiculos[0].Idade))) + "," + str(int(ConvertDiaDaSemana(dado.acidentes[0].DiadaSemana))) + "," + str(int(ConvertSinaisLuminosos(dado.acidentes[0].SinaisLuminosos))) + "," + str(int(ConvertTipoPiso(dado.acidentes[0].TipoPiso))) + ","+ str(int(ConvertTipoVias(dado.acidentes[0].TiposVias)))+ "," + str(int(dado.acidentes[0].NumFeridosgravesa30dias)) + ","  + str(int(dado.acidentes[0].NumFeridosligeirosa30dias)) + ","+ str(int(ConvertCaracteristicasTecnicas(dado.acidentes[0].CaracterísticasTecnicas1))) + ","  + str(int(ConvertConducaoAderencia(dado.acidentes[0].CondAderência))) + ","+ str(int(dado.acidentes[0].NumMortosa30dias))+ ","+ str(int(ConvertFactoresAtmosfericos(dado.acidentes[0].FactoresAtmosféricos)))+","+ str(int(ConvertNatureza(dado.acidentes[0].Natureza)))+","+ str(int(ConvertAcessorioPassageiros(dado.passageiros[0].AcessóriosPassageiro)))+","+ str(int(ConvertLesoes30Dias(dado.passageiros[0].Lesõesa30dias))) +"\n"
         csvStr += x  
     except:
         a=0
