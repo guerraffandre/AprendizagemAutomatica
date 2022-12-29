@@ -1,4 +1,4 @@
-from exer2 import ImportData, ReadJson
+from Funcs import ImportData, ReadJson
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -9,10 +9,11 @@ from sklearn.model_selection import cross_val_score
 from sklearn.neighbors  import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 import warnings
+import os
 warnings.filterwarnings("ignore")
 
-df = pd.read_csv("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/src/data/exer5Data.csv")
-df9 = pd.read_csv("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/src/data/exer9Data.csv")
+df = pd.read_csv(os.getcwd()  + "\src\data\exer5Data.csv")
+df9 = pd.read_csv(os.getcwd()  + "\src\data\exer9Data.csv")
 
 X_train, X_test, y_train, y_test = train_test_split(df.iloc[:, :-1], df.iloc[:,-1], test_size=0.3, random_state=1)
 knn= KNeighborsClassifier(n_neighbors=100)

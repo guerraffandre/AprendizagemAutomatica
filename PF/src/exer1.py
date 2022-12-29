@@ -1,4 +1,4 @@
-from exer2 import ImportData
+from Funcs import ImportData
 import time
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@ col_names = ['cvAnomatricula','aVelocidadelocal','aVelocidadegeral','cvSexo','cv
 ### Decision Tree
 avg = 0
 for i in range(30):
-    pima = pd.read_csv(os.getcwd()  + "\PF\src\data\exer9Data.csv", header=None, names=col_names)
+    pima = pd.read_csv(os.getcwd()  + "\src\data\exer9Data.csv", header=None, names=col_names)
     pima.head()
     #split dataset in features and target variable
     feature_cols = ['cvSexo', 'cvIdade', 'aTipoVias', 'aTipoPiso','aCondAderência','aCaracterísticasTecnicas1','aNumFeridosligeirosa30dia']
@@ -44,7 +44,7 @@ avg = 0
 for i in range(30):
     # Creating labelEncoder
     le = preprocessing.LabelEncoder()     
-    pima = pd.read_csv(os.getcwd()  + "\PF\src\data\exer9Data.csv", header=None, names=col_names)
+    pima = pd.read_csv(os.getcwd()  + "\src\data\exer9Data.csv", header=None, names=col_names)
     pima.head()
     #split dataset in features and target variable
     feature_cols = ['cvSexo', 'cvIdade', 'aTipoVias', 'aTipoPiso','aCondAderência','aCaracterísticasTecnicas1','aNumFeridosligeirosa30dia']
@@ -73,7 +73,7 @@ print("Final avg: " + str(avg/30))
 ### XGBoost
 avg = 0
 for i in range(30):
-    df = pd.read_csv(os.getcwd()  + "\PF\src\data\exer9Data.csv", header=None, names=col_names)
+    df = pd.read_csv(os.getcwd()  + "\src\data\exer9Data.csv", header=None, names=col_names)
     df.head()
     feature_cols = ['cvSexo', 'cvIdade', 'aTipoVias', 'aTipoPiso','aCondAderência','aCaracterísticasTecnicas1','aNumFeridosligeirosa30dia']
     X = df[feature_cols] # Features

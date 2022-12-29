@@ -1,4 +1,4 @@
-from exer2 import ImportData, ReadJson
+from Funcs import ImportData, ReadJson
 import time
 import random
 from datetime import date, datetime

@@ -1,4 +1,4 @@
-from exer2 import ImportData, ReadJson
+from Funcs import ImportData, ReadJson
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -9,5 +9,5 @@ from sklearn.neighbors import NearestNeighbors
 
 coluna1 = "cvSexo"
 coluna2 = "cvIdade"
-df = pd.read_csv(os.getcwd()  + "\PF\src\data\exer5Data.txt")  
+df = pd.read_csv(os.getcwd()  + "\src\data\exer5Data.txt")  
 
