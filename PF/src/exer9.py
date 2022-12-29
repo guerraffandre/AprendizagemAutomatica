@@ -17,12 +17,12 @@ col_names = ['cvAnomatricula','aVelocidadelocal','aVelocidadegeral','cvSexo','cv
 ### Decision Tree
 avg = 0
 for i in range(30):
-    pima = pd.read_csv(os.getcwd()  + "\src\data\exer9Data.csv", header=None, names=col_names)
+    pima = pd.read_csv(os.getcwd()  + "\src\data\DataToExer7.csv", header=None, names=col_names)
     pima.head()
     #split dataset in features and target variable
-    feature_cols = ['cvSexo', 'cvIdade', 'aTipoVias', 'aTipoPiso','aCondAderência','aCaracterísticasTecnicas1','aNumFeridosligeirosa30dia']
+    feature_cols = ['aFactoresAtmosféricos','aNatureza','aCaracterísticasTecnicas1','aCondAderência','aEstadoConservação','aTraçado1','aTraçado2','aTraçado3','aTraçado4','pAcessóriosPassageiro']
     X = pima[feature_cols] # Features
-    y = pima.aNumMortosa30dias # Target variable
+    y = pima.aNumFeridosligeirosa30dia # Target variables => 'aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia','aNumMortosa30dias',
     # Split dataset into training set and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
     # Create Decision Tree classifer object
@@ -44,12 +44,12 @@ avg = 0
 for i in range(30):
     # Creating labelEncoder
     le = preprocessing.LabelEncoder()     
-    pima = pd.read_csv(os.getcwd()  + "\src\data\exer9Data.csv", header=None, names=col_names)
+    pima = pd.read_csv(os.getcwd()  + "\src\data\DataToExer7.csv", header=None, names=col_names)
     pima.head()
     #split dataset in features and target variable
-    feature_cols = ['cvSexo', 'cvIdade', 'aTipoVias', 'aTipoPiso','aCondAderência','aCaracterísticasTecnicas1','aNumFeridosligeirosa30dia']
+    feature_cols = ['aFactoresAtmosféricos','aNatureza','aCaracterísticasTecnicas1','aCondAderência','aEstadoConservação','aTraçado1','aTraçado2','aTraçado3','aTraçado4','pAcessóriosPassageiro']
     X = pima[feature_cols] # Features
-    y = pima.aNumMortosa30dias # Target variable
+    y = pima.aNumFeridosligeirosa30dia # Target variables => 'aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia','aNumMortosa30dias',
     # Import train_test_split function
     # Split dataset into training set and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)  # 70% training and 30% test
@@ -73,11 +73,11 @@ print("Final avg: " + str(avg/30))
 ### XGBoost
 avg = 0
 for i in range(30):
-    df = pd.read_csv(os.getcwd()  + "\src\data\exer9Data.csv", header=None, names=col_names)
+    df = pd.read_csv(os.getcwd()  + "\src\data\DataToExer7.csv", header=None, names=col_names)
     df.head()
-    feature_cols = ['cvSexo', 'cvIdade', 'aTipoVias', 'aTipoPiso','aCondAderência','aCaracterísticasTecnicas1','aNumFeridosligeirosa30dia']
+    feature_cols = ['aFactoresAtmosféricos','aNatureza','aCaracterísticasTecnicas1','aCondAderência','aEstadoConservação','aTraçado1','aTraçado2','aTraçado3','aTraçado4','pAcessóriosPassageiro']
     X = df[feature_cols] # Features
-    y = df.aNumMortosa30dias # Target variable
+    y = df.aNumFeridosligeirosa30dia # Target variables => 'aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia','aNumMortosa30dias',
     # Import train_test_split function
     # Split dataset into training set and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)  # 70% training and 30% test

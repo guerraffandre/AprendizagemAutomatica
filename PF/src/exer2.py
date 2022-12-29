@@ -205,16 +205,67 @@ def ConvertLesoes30Dias(carga):
     else:
         return "UNKNOW"
 
+def ConvertEstadoConservacao(carga):
+    if carga == "Em bom estado":
+        return 0
+    elif carga == "Em estado regular":
+        return 1
+    elif carga == "Em mau estado":
+        return 3
+    else:
+        return "UNKNOW"
+
+def ConvertTrasado1(carga):
+    if carga == "Curva":
+        return 0
+    elif carga == "Reta":
+        return 1
+    else:
+        return "UNKNOW"
+
+def ConvertTrasado2(carga):
+    if carga == "Com inclinação":
+        return 0
+    elif carga == "Em Lomba":
+        return 1
+    elif carga == "Em patamar":
+        return 2
+    else:
+        return "UNKNOW"
+
+def ConvertTrasado3(carga):
+    if carga == "Berma não pavimentada":
+        return 0
+    elif carga == "Berma pavimentada":
+        return 1
+    elif carga == "Sem berma ou impraticável":
+        return 2
+    else:
+        return "UNKNOW"
+
+def ConvertTrasado4(carga):
+    if carga == "Em parque de estacionamento":
+        return 0
+    elif carga == "Em plena via":
+        return 1
+    elif carga == "Em via ou pista reservada":
+        return 2
+    elif carga == "Na berma":
+        return 3
+    elif carga == "No passeio":
+        return 4
+    else:
+        return "UNKNOW"
 
 
 regAcidentes = ReadJson()
-csvStr = "cvAnomatricula,aVelocidadelocal,aVelocidadegeral,cvSexo,cvIdade,aSinaisLuminosos,aDiadaSemana,aTipoPiso,aTipoVias,aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia,aCaracterísticasTecnicas1,aCondAderência,aNumMortosa30dias,aFactoresAtmosféricos,aNatureza,pAcessóriosPassageiro,pLesõesa30dias\n"
+csvStr = "aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia,aNumMortosa30dias,aFactoresAtmosféricos,aNatureza,aCaracterísticasTecnicas1,aCondAderência,aEstadoConservação,aTraçado1,aTraçado2,aTraçado3,aTraçado4,pAcessóriosPassageiro\n"
 for dado in regAcidentes:
     try:
-        x = str(int(dado.condutoresVeiculos[0].Anomatricula)) + "," + str(int(dado.acidentes[0].Velocidadelocal)) + "," + str(int(dado.acidentes[0].Velocidadegeral)) + "," + str(int(ConvertSexoToNum(dado.condutoresVeiculos[0].Sexo))) + ","+ str(int(ConvertIdadeToNum(dado.condutoresVeiculos[0].Idade))) + "," + str(int(ConvertDiaDaSemana(dado.acidentes[0].DiadaSemana))) + "," + str(int(ConvertSinaisLuminosos(dado.acidentes[0].SinaisLuminosos))) + "," + str(int(ConvertTipoPiso(dado.acidentes[0].TipoPiso))) + ","+ str(int(ConvertTipoVias(dado.acidentes[0].TiposVias)))+ "," + str(int(dado.acidentes[0].NumFeridosgravesa30dias)) + ","  + str(int(dado.acidentes[0].NumFeridosligeirosa30dias)) + ","+ str(int(ConvertCaracteristicasTecnicas(dado.acidentes[0].CaracterísticasTecnicas1))) + ","  + str(int(ConvertConducaoAderencia(dado.acidentes[0].CondAderência))) + ","+ str(int(dado.acidentes[0].NumMortosa30dias))+ ","+ str(int(ConvertFactoresAtmosfericos(dado.acidentes[0].FactoresAtmosféricos)))+","+ str(int(ConvertNatureza(dado.acidentes[0].Natureza)))+","+ str(int(ConvertAcessorioPassageiros(dado.passageiros[0].AcessóriosPassageiro)))+","+ str(int(ConvertLesoes30Dias(dado.passageiros[0].Lesõesa30dias))) +"\n"
+        x =  str(int(dado.acidentes[0].NumFeridosgravesa30dias)) + ","  + str(int(dado.acidentes[0].NumFeridosligeirosa30dias)) + ","+ str(int(dado.acidentes[0].NumMortosa30dias))+ ","+ str(int(ConvertFactoresAtmosfericos(dado.acidentes[0].FactoresAtmosféricos)))+","+ str(int(ConvertNatureza(dado.acidentes[0].Natureza))) + ","+ str(int(ConvertCaracteristicasTecnicas(dado.acidentes[0].CaracterísticasTecnicas1))) + "," + str(int(ConvertConducaoAderencia(dado.acidentes[0].CondAderência))) + "," + str(int(ConvertEstadoConservacao(dado.acidentes[0].EstadoConservação)))+ "," + str(int(ConvertTrasado1(dado.acidentes[0].Traçado1)))+ "," + str(int(ConvertTrasado2(dado.acidentes[0].Traçado2)))+ "," + str(int(ConvertTrasado3(dado.acidentes[0].Traçado3)))+ "," + str(int(ConvertTrasado4(dado.acidentes[0].Traçado4))) +","+ str(int(ConvertAcessorioPassageiros(dado.passageiros[0].AcessóriosPassageiro))) + "\n"
         csvStr += x  
     except:
         a=0
 
-with open(os.getcwd()  + "\src\data\DataJson5000.csv", "w", encoding='utf-8') as file:
+with open(os.getcwd()  + "\src\data\DataToExer7.csv", "w", encoding='utf-8') as file:
     file.write(csvStr)

@@ -14,9 +14,9 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-df = pd.read_csv(os.getcwd()  + "\src\data\DataJson5000.csv")
+df = pd.read_csv(os.getcwd()  + "\src\data\DataToExer7.csv")
 
 correlations = df.corr()
-sns.heatmap(correlations)
+sns.heatmap(correlations, xticklabels=correlations.columns, yticklabels=correlations.columns)
 plt.show()
         

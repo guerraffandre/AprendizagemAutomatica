@@ -24,12 +24,12 @@ maxRows = 5000
 yearsToImport=["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"]#,"2011","2012","2013","2014","2015","2016","2017","2018","2019"
 
 def ReadJson():
-    with open( os.getcwd()  + "\PF\src\data\DataJson5000.json", 'r') as file:
+    with open( os.getcwd()  + "\src\data\DataJson5000.json", 'r') as file:
         json_str = file.read()
         return jsonpickle.decode(json_str)
         
 def CreateJson(list):
-    with open(os.getcwd()  + "\PF\src\data\DataJson5000.json", "w") as file:
+    with open(os.getcwd()  + "\src\data\DataJson5000.json", "w") as file:
         jsonpickle.set_encoder_options('json', sort_keys=True, indent=4)
         frozen = jsonpickle.encode(list, file)
         file.write(frozen)
@@ -93,15 +93,15 @@ def ReadExcel(year):
     matrixSheet3.pop(0)
     matrixSheet4.pop(0)
     print("Building matrix's finished " + str(year) + ".")
-    print("len matrix " + str(year) + " to build => " + str(len(matrixSheet1)))
+    print("len matrix " + str(year) + " to build => " + str(len(matrixSheet3)))
 
-    while auxI < maxRows or len(matrixSheet1) == 0:
-        if len(matrixSheet1) == 0:
+    while auxI < maxRows or len(matrixSheet3) == 0:
+        if len(matrixSheet3) == 0:
             break
         print(str(year) + ": " + str(auxI/maxRows*100))
         #print(str(year) + " len matrix remaining => " + str(len(matrixSheet1)))
-        rowIndexx = randrange(0, len(matrixSheet1))
-        row = sheet0[matrixSheet1[rowIndexx].rowIndex]
+        rowIndexx = randrange(0, len(matrixSheet3))
+        row = sheet0[matrixSheet3[rowIndexx].rowIndex]
                 
         #print(str(year) + " adding id => " + str(row[0].value))
         reg = RegAcidente(

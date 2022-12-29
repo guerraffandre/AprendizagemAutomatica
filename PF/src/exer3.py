@@ -20,7 +20,6 @@ def get_season(now):
     return next(season for season, (start, end) in seasons if start <= now <= end)
 
 maxRowsToRead = 100
-        
 regAcidentes = ReadJson()
 
 dataToGraphMain = []        
