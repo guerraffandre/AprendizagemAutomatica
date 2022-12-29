@@ -1,4 +1,4 @@
-from createData import ImportData, ReadJson
+from exer2 import ImportData, ReadJson
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd

@@ -1,4 +1,4 @@
-from createData import ImportData, ReadJson
+from exer2 import ImportData, ReadJson
 import time
 import random
 from datetime import date, datetime
@@ -66,7 +66,7 @@ for regAcidente in regAcidentes:
                         typeDataAux.countEstacoes[3] = typeDataAux.countEstacoes[3] + 1
                         typeDataAux.outono += 1
     
-plt.figure(figsize=(10,5))
+plt.figure(figsize=(10,8))
 barWidth = 0.25
 tiposAcidente = []
 inverno = []
@@ -94,7 +94,7 @@ plt.bar(r3, verao, color="#666666", width=barWidth, label="verao")
 plt.bar(r4, outono, color="#000000", width=barWidth, label="outono")
     
 plt.xlabel('Tipos acidentes')
-plt.xticks([r + barWidth for r in range(len(tiposAcidente))], tiposAcidente)
+plt.xticks([r + barWidth for r in range(len(tiposAcidente))], tiposAcidente,rotation='vertical')
 plt.ylabel('Numero de acidentes')
 plt.title('Representação do numero de acidentes por estações')
 plt.legend()
