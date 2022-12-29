@@ -12,7 +12,7 @@ import os
 import csv
 import warnings
 warnings.filterwarnings("ignore")
-
+"""
 def ConvertSexoToNum(sexoStr):
     if sexoStr == "Masculino":
         return 0
@@ -216,10 +216,11 @@ for dado in regAcidentes:
     except:
         a=0
 
-with open("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/src/data/exer5Data.csv", "w", encoding='utf-8') as file:
+with open(os.getcwd()  + "\PF\src\data\DataJson5000.csv", "w", encoding='utf-8') as file:
     file.write(csvStr)
+"""
 
-df = pd.read_csv("D:/tudo/Mestrado/IAA/Final/AprendizagemAutomatica/PF/src/data/exer5Data.csv")
+df = pd.read_csv(os.getcwd()  + "\PF\src\data\DataJson5000.csv")
 
 correlations = df.corr()
 sns.heatmap(correlations)

@@ -1,6 +1,6 @@
 class AuxImportData(object):
-    def __init__(self):
-        self.id = 0
-        self.rowIndex = 0
+    def __init__(self, id, rowIndex):
+        self.id = id
+        self.rowIndex = rowIndex
         
     
