@@ -267,5 +267,5 @@ for dado in regAcidentes:
     except:
         a=0
 
-with open(os.getcwd()  + "\src\data\DataToExer7.csv", "w", encoding='utf-8') as file:
+with open(os.getcwd()  + "\src\data\Data3000.csv", "w", encoding='utf-8') as file:
     file.write(csvStr)
