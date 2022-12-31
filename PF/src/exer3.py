@@ -102,7 +102,5 @@ plt.show()
 """
 valor tratado foi o valor não definido porque é irrelevante
 
-tendo em conta os dados fornecidos que so vão de janeiro a maio, apenas demostra 2 barras, sendo estas do inverno e primavera
-
 concluir os resultados do grafico
 """
