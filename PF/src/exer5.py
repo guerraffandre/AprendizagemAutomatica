@@ -14,7 +14,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-df = pd.read_csv(os.getcwd()  + "\src\data\DataToExer7.csv")
+df = pd.read_csv(os.getcwd()  + "\src\data\Data1100.csv")
 
 correlations = df.corr()
 sns.heatmap(correlations, xticklabels=correlations.columns, yticklabels=correlations.columns)

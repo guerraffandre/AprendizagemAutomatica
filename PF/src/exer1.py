@@ -9,9 +9,7 @@ if __name__ == '__main__':
     et = time.time()
     print(str(et - st))
     
-    with open(os.getcwd()  + "\src\data\ktime.txt", "w", encoding='utf-8') as file:
-        file.write(str(et - st))
-
-    os.system("shutdown /s /t 1")
+    #with open(os.getcwd()  + "\src\data\ktime.txt", "w", encoding='utf-8') as file:
+    #    file.write(str(et - st))
     
     

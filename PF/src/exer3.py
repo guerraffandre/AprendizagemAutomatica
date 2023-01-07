@@ -93,9 +93,3 @@ plt.ylabel('Numero de acidentes')
 plt.title('Representação do numero de acidentes por estações')
 plt.legend()
 plt.show()
-
-"""
-valor tratado foi o valor não definido porque é irrelevante
-
-concluir os resultados do grafico
-"""

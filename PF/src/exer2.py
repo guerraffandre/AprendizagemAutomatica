@@ -181,6 +181,20 @@ def ConvertNatureza(carga):
     else:
         return "UNKNOW"
 
+def ConvertTrasado4(carga):
+    if carga == "Em parque de estacionamento":
+        return 0
+    elif carga == "Em plena via":
+        return 1
+    elif carga == "Em via ou pista reservada":
+        return 2
+    elif carga == "Na berma":
+        return 3
+    elif carga == "No passeio":
+        return 4
+    else:
+        return "UNKNOW"
+
 def ConvertAcessorioPassageiros(carga):
     if carga == "C/ capacete/ cinto segurança":
         return 0
@@ -243,30 +257,16 @@ def ConvertTrasado3(carga):
     else:
         return "UNKNOW"
 
-def ConvertTrasado4(carga):
-    if carga == "Em parque de estacionamento":
-        return 0
-    elif carga == "Em plena via":
-        return 1
-    elif carga == "Em via ou pista reservada":
-        return 2
-    elif carga == "Na berma":
-        return 3
-    elif carga == "No passeio":
-        return 4
-    else:
-        return "UNKNOW"
-
 
 regAcidentes = ReadJson()
-csvStr = "aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia,aNumMortosa30dias,aFactoresAtmosféricos,aNatureza,aCaracterísticasTecnicas1,aCondAderência,aEstadoConservação,aTraçado1,aTraçado2,aTraçado3,aTraçado4,pAcessóriosPassageiro\n"
+csvStr = "aNumFeridosgravesa30dias,aNumFeridosligeirosa30dia,aNumMortosa30dias,aFactoresAtmosféricos,aNatureza,aCaracterísticasTecnicas1,aCondAderência,aEstadoConservação,aTraçado1,aTraçado2,aTraçado3,aTraçado4,pAcessóriosPassageiro,cvSexo,cvIdade\n"
 for dado in regAcidentes:
     try:
-        x =  str(int(dado.acidentes[0].NumFeridosgravesa30dias)) + ","  + str(int(dado.acidentes[0].NumFeridosligeirosa30dias)) + ","+ str(int(dado.acidentes[0].NumMortosa30dias))+ ","+ str(int(ConvertFactoresAtmosfericos(dado.acidentes[0].FactoresAtmosféricos)))+","+ str(int(ConvertNatureza(dado.acidentes[0].Natureza))) + ","+ str(int(ConvertCaracteristicasTecnicas(dado.acidentes[0].CaracterísticasTecnicas1))) + "," + str(int(ConvertConducaoAderencia(dado.acidentes[0].CondAderência))) + "," + str(int(ConvertEstadoConservacao(dado.acidentes[0].EstadoConservação)))+ "," + str(int(ConvertTrasado1(dado.acidentes[0].Traçado1)))+ "," + str(int(ConvertTrasado2(dado.acidentes[0].Traçado2)))+ "," + str(int(ConvertTrasado3(dado.acidentes[0].Traçado3)))+ "," + str(int(ConvertTrasado4(dado.acidentes[0].Traçado4))) +","+ str(int(ConvertAcessorioPassageiros(dado.passageiros[0].AcessóriosPassageiro))) + "\n"
+        x =  str(int(dado.acidentes[0].NumFeridosgravesa30dias)) + ","  + str(int(dado.acidentes[0].NumFeridosligeirosa30dias)) + ","+ str(int(dado.acidentes[0].NumMortosa30dias))+ ","+ str(int(ConvertFactoresAtmosfericos(dado.acidentes[0].FactoresAtmosféricos)))+","+ str(int(ConvertNatureza(dado.acidentes[0].Natureza))) + ","+ str(int(ConvertCaracteristicasTecnicas(dado.acidentes[0].CaracterísticasTecnicas1))) + "," + str(int(ConvertConducaoAderencia(dado.acidentes[0].CondAderência))) + "," + str(int(ConvertEstadoConservacao(dado.acidentes[0].EstadoConservação)))+ "," + str(int(ConvertTrasado1(dado.acidentes[0].Traçado1)))+ "," + str(int(ConvertTrasado2(dado.acidentes[0].Traçado2)))+ "," + str(int(ConvertTrasado3(dado.acidentes[0].Traçado3)))+ "," + str(int(ConvertTrasado4(dado.acidentes[0].Traçado4))) +","+ str(int(ConvertAcessorioPassageiros(dado.passageiros[0].AcessóriosPassageiro))) + "," + str(int(ConvertSexoToNum(dado.condutoresVeiculos[0].Sexo))) + ","+ str(int(ConvertIdadeToNum(dado.condutoresVeiculos[0].Idade))) + "\n"
         csvStr += x  
     except:
         a=0
 
-with open(os.getcwd()  + "\src\data\Data1102.csv", "w", encoding='utf-8') as file:
+with open(os.getcwd()  + "\src\data\Data2000Exer6.csv", "w", encoding='utf-8') as file:
     file.write(csvStr)
 
