@@ -2,7 +2,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KClassifier
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
-import kotlin.reflect.full.declaredMemberProperties
+/*import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 
@@ -112,4 +112,4 @@ fun main() {
     val sql2: String = insertInto(s)
     println(sql2)
     //INSERT INTO Student (number, name, type) VALUES (7, ‘Cristiano’, ‘Doctoral’);
-}
+}*/

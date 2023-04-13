@@ -1,4 +1,5 @@
 import kotlin.reflect.KClass
+/*
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 
@@ -26,3 +27,4 @@ fun main() {
     val sql = generateTableSQL(Student::class)
     println(sql)
 }
+*/

@@ -15,6 +15,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(kotlin("script-runtime"))
 }
 
 tasks.test {
