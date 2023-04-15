@@ -1,8 +1,8 @@
 package jsonlibrary
 
+/*
 import JsonObject
 
-/*
     val jsonStr = File("exemplo.json").readText()
 
     val jsonObj = JSONObject(jsonStr)
