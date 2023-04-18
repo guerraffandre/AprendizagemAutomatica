@@ -138,23 +138,18 @@ class JsonVisitorImpl(private val propertyName: String, private val propertyValu
     }
 
     override fun visit(jsonBoolean: JsonBoolean) {
-        // do nothing
     }
 
     override fun visit(jsonDouble: JsonDouble) {
-        // do nothing
     }
 
     override fun visit(jsonNull: JsonNull) {
-        // do nothing
     }
 
     override fun visit(jsonNumber: JsonNumber) {
-        // do nothing
     }
 
     override fun visit(jsonString: JsonString) {
-        // do nothing
     }
 
     override fun visit(jsonObject: JsonObject) {
