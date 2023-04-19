@@ -1,6 +1,7 @@
 package jsonlibrary
 
 
+import jsonlibrary.JsonNull.toJsonString
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -21,7 +22,7 @@ class mainTests {
     }
     @Test
     fun validaEstrutura(): Boolean {
-        val json = File("example.json").readText()
+        val json = toJsonString()
         var index = 0
         val stack = Stack<Char>()
 
