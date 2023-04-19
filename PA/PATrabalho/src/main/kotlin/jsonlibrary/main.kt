@@ -26,7 +26,7 @@ package jsonlibrary
  */
 
 /*Projeção textual*/
-sealed class JsonValue {
+abstract class JsonValue {
     abstract fun toJsonString(depth: Int = 0): String
     abstract fun search(visitor: JsonVisitor)
 }
@@ -190,7 +190,7 @@ fun main(args: Array<String>) {
     jsonArray.addItem(objeto4)
 
     objecto.addProperty("inscritos", jsonArray)
-    //println(objecto.toJsonString(0))
+    println(objecto.toJsonString())
 
     /*SEARCH*/
     val propertyName = "numero"
