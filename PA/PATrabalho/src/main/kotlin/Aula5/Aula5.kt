@@ -2,7 +2,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KClassifier
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
-/*import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.primaryConstructor
 
@@ -97,19 +97,19 @@ fun insertInto(c: Any): String {
 
 fun main() {
     val fields: List<KProperty<*>> = Student::class.dataClassFields
-    //println(fields)
+    println(fields)
     val isEnum = StudentType::class.isEnum
-    //println(isEnum)
+    println(isEnum)
     val enumConstants: List<StudentType> = StudentType::class.enumConstants
-    //println(enumConstants)
+    println(enumConstants)
 
     val clazz: KClass<*> = Student::class
     val sql: String = createTable(clazz)
-    //println(sql)
+    println(sql)
     //CREATE TABLE Student (number INT NOT NULL, name CHAR NOT NULL, type ENUM(‘Bachelor’, ‘Master’, ‘Doctoral’));
 
     val s = Student(7, "Cristiano", StudentType.Doctoral)
     val sql2: String = insertInto(s)
     println(sql2)
     //INSERT INTO Student (number, name, type) VALUES (7, ‘Cristiano’, ‘Doctoral’);
-}*/
+}

@@ -1,5 +1,13 @@
 package jsonlibrary
 
+import kotlin.reflect.KClass
+import kotlin.reflect.KClassifier
+import kotlin.reflect.KProperty
+import kotlin.reflect.KType
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.full.primaryConstructor
+
 /*
 {
   "uc": "PA",
@@ -153,6 +161,7 @@ class JsonVisitorImpl(private val propertyName: String, private val propertyValu
     }
 
     override fun visit(jsonObject: JsonObject) {
+        //passar a implementação disto para as JsonNull,JsonNumber........
         if (jsonObject.properties.containsKey(propertyName) && jsonObject.properties[propertyName]?.toJsonString() == propertyValue.toJsonString()) {
             matchingObjects[propertyName] = propertyValue
         }
@@ -162,6 +171,36 @@ class JsonVisitorImpl(private val propertyName: String, private val propertyValu
     fun getMatchingObjects(): MutableMap<String, JsonValue> {
         return matchingObjects
     }
+}
+
+
+@Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY)
+annotation class DbName(val name: String)
+
+@Target(AnnotationTarget.PROPERTY)
+annotation class PrimaryKey
+
+@Target(AnnotationTarget.PROPERTY)
+annotation class Exclude
+
+@Target(AnnotationTarget.PROPERTY)
+annotation class ForceString
+
+@DbName("STUDENT")
+data class Student(
+    @PrimaryKey
+    val number: Int,
+    @Exclude
+    val xpto: Int,
+    @ForceString
+    val propToForceString: Int,
+    val name: String,
+    @DbName("degree")
+    val type: StudentType
+)
+
+enum class StudentType {
+    Bachelor, Master, Doctoral
 }
 
 
@@ -203,5 +242,8 @@ fun main(args: Array<String>) {
     for (matchingObject in matchingObjects) {
         println(matchingObject.key + ": " + matchingObject.value.toJsonString(0))
     }
+
+    //2 fase => objetoXPTO para os nossos objetos, ver Aula5
+
 
 }
