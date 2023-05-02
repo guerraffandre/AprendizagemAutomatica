@@ -1,5 +1,5 @@
 import kotlin.reflect.KProperty
-/*
+
 import kotlin.reflect.full.memberProperties
 
 interface TypeMapping {
@@ -73,4 +73,4 @@ fun main() {
 
     println("MySQL INSERT SQL: $mysqlInsertSQL")
     println("MySQL SELECT SQL: $mysqlSelectSQL")
-}*/
+}

@@ -1,5 +1,14 @@
 package jsonlibrary
 
+import getSqlType
+import kotlin.jvm.internal.Intrinsics.Kotlin
+import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
+import kotlin.reflect.KType
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.primaryConstructor
+
 /*
 {
   "uc": "PA",
@@ -28,11 +37,18 @@ package jsonlibrary
 abstract class JsonValue {
     abstract fun toJsonString(depth: Int = 0): String
 
-    abstract fun search(
+    open fun search(
         propertyName: String,
         propertyValue: JsonValue,
-        matchingObjects: MutableMap<String, JsonValue>
-    ): MutableMap<String, JsonValue>
+        matchingObjects: MutableMap<String, JsonValue> = mutableMapOf()
+    ): MutableMap<String, JsonValue> {
+        if (this == propertyValue) {
+            matchingObjects[propertyName] = this
+        }
+        return matchingObjects
+    }
+
+    abstract fun mapObject(o: Any): JsonValue
 }
 
 class JsonArray : JsonValue() {
@@ -56,6 +72,10 @@ class JsonArray : JsonValue() {
         items.forEach { it.search(propertyName, propertyValue, matchingObjects) }
         return matchingObjects
     }
+
+    override fun mapObject(o: Any): JsonValue {
+        return JsonArray()
+    }
 }
 
 class JsonBoolean(private val value: Boolean) : JsonValue() {
@@ -63,13 +83,8 @@ class JsonBoolean(private val value: Boolean) : JsonValue() {
         return value.toString()
     }
 
-    override fun search(
-        propertyName: String,
-        propertyValue: JsonValue,
-        matchingObjects: MutableMap<String, JsonValue>
-    ): MutableMap<String, JsonValue> {
-        //no-impl
-        return matchingObjects
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
     }
 }
 
@@ -78,17 +93,12 @@ class JsonDouble(private val value: Double) : JsonValue() {
         return value.toString()
     }
 
-    override fun search(
-        propertyName: String,
-        propertyValue: JsonValue,
-        matchingObjects: MutableMap<String, JsonValue>
-    ): MutableMap<String, JsonValue> {
-        //no-impl
-        return matchingObjects
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
     }
 }
 
-object JsonNull : JsonValue() {
+class JsonNull() : JsonValue() {
     override fun toJsonString(depth: Int): String {
         return "null"
     }
@@ -98,8 +108,11 @@ object JsonNull : JsonValue() {
         propertyValue: JsonValue,
         matchingObjects: MutableMap<String, JsonValue>
     ): MutableMap<String, JsonValue> {
-        //no-impl
         return matchingObjects
+    }
+
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
     }
 }
 
@@ -108,15 +121,8 @@ class JsonNumber(private val value: Number) : JsonValue() {
         return value.toString()
     }
 
-    override fun search(
-        propertyName: String,
-        propertyValue: JsonValue,
-        matchingObjects: MutableMap<String, JsonValue>
-    ): MutableMap<String, JsonValue> {
-        if (this == propertyValue) {
-            matchingObjects[this.hashCode().toString()] = this
-        }
-        return matchingObjects
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
     }
 }
 
@@ -125,17 +131,9 @@ class JsonString(private val value: String) : JsonValue() {
         return "\"$value\""
     }
 
-    override fun search(
-        propertyName: String,
-        propertyValue: JsonValue,
-        matchingObjects: MutableMap<String, JsonValue>
-    ): MutableMap<String, JsonValue> {
-        if (this == propertyValue) {
-            matchingObjects[this.hashCode().toString()] = this
-        }
-        return matchingObjects
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
     }
-
 }
 
 class JsonObject : JsonValue() {
@@ -156,21 +154,40 @@ class JsonObject : JsonValue() {
         propertyValue: JsonValue,
         matchingObjects: MutableMap<String, JsonValue>
     ): MutableMap<String, JsonValue> {
-        if (properties.containsKey(propertyName) && properties[propertyName]?.toJsonString() == propertyValue.toJsonString()) {
-            matchingObjects[propertyName] = propertyValue
+        if (properties.containsKey(propertyName)) {
+            propertyValue.search(propertyName, propertyValue, matchingObjects)
         }
-        properties.values.forEach { it.search(propertyName, propertyValue, matchingObjects) }
         return matchingObjects
     }
-}
 
+    override fun mapObject(o: Any): JsonValue {
+        val clazz: KClass<*> = o::class
+        val fields: List<KProperty<*>> = clazz.dataClassFields
+        val jsonObject = JsonObject()
+
+        fields.forEach {
+            if (!it.annotations.any { it.annotationClass == Exclude::class }) {
+                val value = it.getter.call(o)
+                when (value) {
+                    is String -> jsonObject.addProperty(it.name, JsonString(value))
+                    is Number -> jsonObject.addProperty(it.name, JsonNumber(value))
+                    is Boolean -> jsonObject.addProperty(it.name, JsonBoolean(value))
+                    //is ArrayList<*> -> jsonObject.addProperty(field.name, JsonArray(value))
+                    //else -> jsonObject[field.name] = mapObject(value)
+                }
+            }
+        }
+        return jsonObject
+    }
+
+}
 
 fun main(args: Array<String>) {
 
     var objecto = JsonObject()
     objecto.addProperty("uc", JsonString("PA"))
     objecto.addProperty("ects", JsonDouble(6.0))
-    objecto.addProperty("data-exame", JsonNull)
+    objecto.addProperty("data-exame", JsonNull())
 
     var jsonArray = JsonArray()
     var objeto2 = JsonObject()
@@ -195,20 +212,19 @@ fun main(args: Array<String>) {
     /*SEARCH*/
     val propertyName = "uc"
     val propertyValue = JsonString("PA")
-    val listRes = mutableMapOf<String, JsonValue>()
-    objecto.search(propertyName, propertyValue, listRes)
 
-    println("Matching objects:")
+    val listRes = objecto.search(propertyName, propertyValue)
     for (matchingObject in objecto.search(propertyName, propertyValue, listRes)) {
-        println(matchingObject.key + ": " + matchingObject.value.toJsonString(0))
+        //println(matchingObject.key + ": " + matchingObject.value.toJsonString(0))
     }
 
-    //2 fase => objetoXPTO para os nossos objetos, ver Aula5
-    /*val jo = Student::class::toJO
-    print(jo.get().properties)*/
+    //2 fase
+    val student = Student(12345, "John Doe", StudentType.Bachelor)
+    val oracleGenerator = JsonObject().mapObject(student)
+    println(oracleGenerator.toJsonString())
 }
 
-/*
+
 @Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY)
 annotation class DbName(val name: String)
 
@@ -221,14 +237,12 @@ annotation class Exclude
 @Target(AnnotationTarget.PROPERTY)
 annotation class ForceString
 
-@DbName("STUDENT")
+@Target(AnnotationTarget.PROPERTY)
+annotation class Length(val length: Int)
 data class Student(
-    @PrimaryKey
-    val number: Int,
     @Exclude
-    val xpto: Int,
-    @ForceString
-    val propToForceString: Int,
+    val number: Int,
+    @Length(50)
     val name: String,
     @DbName("degree")
     val type: StudentType
@@ -245,9 +259,3 @@ val KClass<*>.dataClassFields: List<KProperty<*>>
             declaredMemberProperties.find { it.name == p.name }!!
         }
     }
-
-val KClass<*>.toJO: JsonObject
-    get() {
-        print(declaredMemberProperties)
-        return JsonObject()
-    }*/
