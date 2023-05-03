@@ -1,12 +1,8 @@
 package jsonlibrary
 
-import getSqlType
-import kotlin.jvm.internal.Intrinsics.Kotlin
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
-import kotlin.reflect.KType
 import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 
 /*
@@ -172,14 +168,19 @@ class JsonObject : JsonValue() {
                     is String -> jsonObject.addProperty(it.name, JsonString(value))
                     is Number -> jsonObject.addProperty(it.name, JsonNumber(value))
                     is Boolean -> jsonObject.addProperty(it.name, JsonBoolean(value))
+                    is Enum<*> -> jsonObject.addProperty(it.name, JsonString(value.name))
                     //is ArrayList<*> -> jsonObject.addProperty(field.name, JsonArray(value))
                     //else -> jsonObject[field.name] = mapObject(value)
+
                 }
             }
         }
         return jsonObject
     }
 
+}
+fun Any.isEnum(): Boolean {
+    return this is Enum<*>
 }
 
 fun main(args: Array<String>) {
@@ -246,6 +247,9 @@ data class Student(
     val name: String,
     @DbName("degree")
     val type: StudentType
+
+        //trocar o nome das variaveis
+        //forçar ser string
 )
 
 enum class StudentType {
