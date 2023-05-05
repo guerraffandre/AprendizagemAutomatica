@@ -1,7 +1,6 @@
 package jsonlibrary
 
 
-import jsonlibrary.JsonNull.toJsonString
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -25,7 +24,7 @@ class mainTests {
         var objecto = JsonObject()
         objecto.addProperty("uc", JsonString("PA"))
         objecto.addProperty("ects", JsonDouble(6.0))
-        objecto.addProperty("data-exame", JsonNull)
+        objecto.addProperty("data-exame", JsonNull())
 
         var jsonArray = JsonArray()
         var objeto2 = JsonObject()
