@@ -241,7 +241,7 @@ annotation class ForceString
 @Target(AnnotationTarget.PROPERTY)
 annotation class Length(val length: Int)
 data class Student(
-    @Exclude
+    //@Exclude
     val number: Int,
     @Length(50)
     val name: String,
