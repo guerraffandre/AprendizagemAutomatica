@@ -163,19 +163,43 @@ class JsonObject : JsonValue() {
         val jsonObject = JsonObject()
 
         fields.forEach { field ->
-            val fieldNameAnnotation = field.findAnnotation<ChangeName>()
-            val fieldName = fieldNameAnnotation?.name ?: field.name
-
             if (!field.annotations.any { it.annotationClass == Exclude::class }) {
                 val value = field.getter.call(o)
 
+                val fieldNameAnnotation = field.findAnnotation<ChangeName>()
+                val fieldName = fieldNameAnnotation?.name ?: field.name
+
+                val forceStringAnnotation = field.findAnnotation<ToString>()
+
                 when (value) {
-                    is String -> jsonObject.addProperty(fieldName, JsonString(value))
-                    is Number -> jsonObject.addProperty(fieldName, JsonNumber(value))
-                    is Boolean -> jsonObject.addProperty(fieldName, JsonBoolean(value))
-                    is Enum<*> -> jsonObject.addProperty(fieldName, JsonString(value.name))
-                    //is ArrayList<*> -> jsonObject.addProperty(fieldName, JsonArray(value))
-                    //else -> jsonObject[fieldName] = mapObject(value)
+                    is String -> {
+                        if (forceStringAnnotation != null) {
+                            jsonObject.addProperty(fieldName, JsonString(value))
+                        } else {
+                            jsonObject.addProperty(fieldName, JsonString(value))
+                        }
+                    }
+                    is Number -> {
+                        if (forceStringAnnotation != null) {
+                            jsonObject.addProperty(fieldName, JsonString(value.toString()))
+                        } else {
+                            jsonObject.addProperty(fieldName, JsonNumber(value))
+                        }
+                    }
+                    is Boolean -> {
+                        if (forceStringAnnotation != null) {
+                            jsonObject.addProperty(fieldName, JsonString(value.toString()))
+                        } else {
+                            jsonObject.addProperty(fieldName, JsonBoolean(value))
+                        }
+                    }
+                    is Enum<*> -> {
+                        if (forceStringAnnotation != null) {
+                            jsonObject.addProperty(fieldName, JsonString(value.name))
+                        } else {
+                            jsonObject.addProperty(fieldName, JsonString(value.name))
+                        }
+                    }
                 }
             }
         }
@@ -242,8 +266,11 @@ annotation class Exclude
 @Target(AnnotationTarget.PROPERTY)
 annotation class ToString
 
+
+
 @Target(AnnotationTarget.PROPERTY)
 annotation class Length(val length: Int)
+
 
 
 @Retention(AnnotationRetention.RUNTIME)
@@ -253,13 +280,14 @@ annotation class ChangeName(val name: String)
 data class Student(
     //@Exclude
         @ChangeName("student_id")
+       // @ToString
     val number: Int,
     @Length(50)
     val name: String,
     @DbName("degree")
     val type: StudentType
 
-        //trocar o nome das variaveis
+
         //forçar ser string
 )
 
