@@ -3,6 +3,7 @@ package jsonlibrary
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.primaryConstructor
 
 /*
@@ -161,17 +162,20 @@ class JsonObject : JsonValue() {
         val fields: List<KProperty<*>> = clazz.dataClassFields
         val jsonObject = JsonObject()
 
-        fields.forEach {
-            if (!it.annotations.any { it.annotationClass == Exclude::class }) {
-                val value = it.getter.call(o)
-                when (value) {
-                    is String -> jsonObject.addProperty(it.name, JsonString(value))
-                    is Number -> jsonObject.addProperty(it.name, JsonNumber(value))
-                    is Boolean -> jsonObject.addProperty(it.name, JsonBoolean(value))
-                    is Enum<*> -> jsonObject.addProperty(it.name, JsonString(value.name))
-                    //is ArrayList<*> -> jsonObject.addProperty(field.name, JsonArray(value))
-                    //else -> jsonObject[field.name] = mapObject(value)
+        fields.forEach { field ->
+            val fieldNameAnnotation = field.findAnnotation<ChangeName>()
+            val fieldName = fieldNameAnnotation?.name ?: field.name
 
+            if (!field.annotations.any { it.annotationClass == Exclude::class }) {
+                val value = field.getter.call(o)
+
+                when (value) {
+                    is String -> jsonObject.addProperty(fieldName, JsonString(value))
+                    is Number -> jsonObject.addProperty(fieldName, JsonNumber(value))
+                    is Boolean -> jsonObject.addProperty(fieldName, JsonBoolean(value))
+                    is Enum<*> -> jsonObject.addProperty(fieldName, JsonString(value.name))
+                    //is ArrayList<*> -> jsonObject.addProperty(fieldName, JsonArray(value))
+                    //else -> jsonObject[fieldName] = mapObject(value)
                 }
             }
         }
@@ -236,12 +240,19 @@ annotation class PrimaryKey
 annotation class Exclude
 
 @Target(AnnotationTarget.PROPERTY)
-annotation class ForceString
+annotation class ToString
 
 @Target(AnnotationTarget.PROPERTY)
 annotation class Length(val length: Int)
+
+
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.PROPERTY)
+annotation class ChangeName(val name: String)
+
 data class Student(
     //@Exclude
+        @ChangeName("student_id")
     val number: Int,
     @Length(50)
     val name: String,
