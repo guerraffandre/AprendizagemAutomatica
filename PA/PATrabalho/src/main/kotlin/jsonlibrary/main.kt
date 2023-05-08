@@ -1,5 +1,6 @@
 package jsonlibrary
 
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.declaredMemberProperties
@@ -140,9 +141,25 @@ class JsonObject : JsonValue() {
         properties[name] = value
     }
 
-    fun updateValue(name: String, value: JsonValue) {
-        properties[name] = value
+    fun update(key: String, value: String) {
+        when {
+            value.equals("null", ignoreCase = true) -> properties[key] = JsonNull()
+            value.toDoubleOrNull() != null -> properties[key] = JsonDouble(value.toDouble())
+            value.equals("true", ignoreCase = true) || value.equals("false", ignoreCase = true) -> properties[key] =
+                JsonBoolean(value.toBoolean())
+
+            value.startsWith("[") && value.endsWith("]") -> readJsonArray(key)
+            else -> properties[key] = JsonString(value)
+        }
     }
+
+    fun readJsonArray(name: String) {
+        var jsonArray = JsonArray()
+        var objeto2 = JsonObject()
+        jsonArray.addItem(objeto2)
+        this.addProperty(name, jsonArray)
+    }
+
 
     override fun toJsonString(depth: Int): String {
         val propertyStrings = properties.map { (name, value) ->
@@ -152,12 +169,12 @@ class JsonObject : JsonValue() {
     }
 
     override fun search(
-        propertyName: String,
-        propertyValue: JsonValue,
+        key: String,
+        value: JsonValue,
         matchingObjects: MutableMap<String, JsonValue>
     ): MutableMap<String, JsonValue> {
-        if (properties.containsKey(propertyName)) {
-            propertyValue.search(propertyName, propertyValue, matchingObjects)
+        if (properties.containsKey(key)) {
+            value.search(key, value, matchingObjects)
         }
         return matchingObjects
     }
@@ -184,6 +201,7 @@ class JsonObject : JsonValue() {
                             jsonObject.addProperty(fieldName, JsonString(value))
                         }
                     }
+
                     is Number -> {
                         if (forceStringAnnotation != null) {
                             jsonObject.addProperty(fieldName, JsonString(value.toString()))
@@ -191,6 +209,7 @@ class JsonObject : JsonValue() {
                             jsonObject.addProperty(fieldName, JsonNumber(value))
                         }
                     }
+
                     is Boolean -> {
                         if (forceStringAnnotation != null) {
                             jsonObject.addProperty(fieldName, JsonString(value.toString()))
@@ -198,6 +217,7 @@ class JsonObject : JsonValue() {
                             jsonObject.addProperty(fieldName, JsonBoolean(value))
                         }
                     }
+
                     is Enum<*> -> {
                         if (forceStringAnnotation != null) {
                             jsonObject.addProperty(fieldName, JsonString(value.name))
@@ -212,6 +232,7 @@ class JsonObject : JsonValue() {
     }
 
 }
+
 fun Any.isEnum(): Boolean {
     return this is Enum<*>
 }
@@ -272,10 +293,8 @@ annotation class Exclude
 annotation class ToString
 
 
-
 @Target(AnnotationTarget.PROPERTY)
 annotation class Length(val length: Int)
-
 
 
 @Retention(AnnotationRetention.RUNTIME)
@@ -284,8 +303,8 @@ annotation class ChangeName(val name: String)
 
 data class Student(
     //@Exclude
-        @ChangeName("student_id")
-       // @ToString
+    @ChangeName("student_id")
+    // @ToString
     val number: Int,
     @Length(50)
     val name: String,
@@ -293,7 +312,7 @@ data class Student(
     val type: StudentType
 
 
-        //forçar ser string
+    //forçar ser string
 )
 
 enum class StudentType {

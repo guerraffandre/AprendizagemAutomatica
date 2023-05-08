@@ -4,10 +4,11 @@ import java.awt.Component
 import java.awt.Dimension
 import java.awt.GridLayout
 import java.awt.event.*
+import java.util.*
 import javax.swing.*
 
 
-val theMainObject = getObject()
+val theMainObject = getObject2()
 fun main() {
     Editor().open()
 }
@@ -18,7 +19,7 @@ class Editor {
     val frame = JFrame("Josue - JSON Object Editor").apply {
         defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         layout = GridLayout(0, 2)
-        size = Dimension(600, 600)
+        size = Dimension(1700, 1200)
 
         val left = JPanel()
         left.layout = GridLayout()
@@ -47,26 +48,31 @@ class Editor {
             alignmentX = Component.LEFT_ALIGNMENT
             alignmentY = Component.TOP_ALIGNMENT
 
-            fun addProperties(properties: Map<String, JsonValue>) {
+            fun addProperties(properties: Map<String, JsonValue>, depth: Int = 0) {
                 properties.forEach { (key, value) ->
+                    val indentedKey = "                    ".repeat(depth) + key
                     if (value is JsonArray) {
                         value.items.forEach { item ->
                             if (item is JsonObject) {
-                                addProperties(item.properties)
+                                addProperties(
+                                    item.properties,
+                                    depth + 1
+                                )
                             } else {
-                                add(testWidget(key, item.toJsonString()))
+                                add(testWidget(indentedKey, item.toJsonString()))
                             }
                         }
                     } else if (value is JsonObject) {
-                        addProperties(value.properties)
+                        addProperties(
+                            value.properties,
+                            depth + 1
+                        )
                     } else {
-                        add(testWidget(key, value.toJsonString()))
+                        add(testWidget(indentedKey, value.toJsonString()))
                     }
                 }
             }
-
             addProperties(theMainObject.properties)
-
 
             // menu
             addMouseListener(object : MouseAdapter() {
@@ -76,6 +82,7 @@ class Editor {
                         val add = JButton("add")
                         add.addActionListener {
                             val text = JOptionPane.showInputDialog("text")
+                            val id = theMainObject.addProperty(text, JsonString("?"))
                             add(testWidget(text, "?"))
                             menu.isVisible = false
                             revalidate()
@@ -109,10 +116,7 @@ class Editor {
             val text = JTextField(value)
             text.addKeyListener(object : KeyAdapter() {
                 override fun keyReleased(e: KeyEvent?) {
-                    println("value: ${text.text}")
-                    println("key: $key")
-
-                    theMainObject.updateValue(key, JsonString(text.text))
+                    theMainObject.update(key, text.text)
                     srcArea.text = theMainObject.toJsonString()
                 }
             })
@@ -150,6 +154,14 @@ fun getObject2(): JsonObject {
     objeto4.addProperty("nome", JsonString("André Santos"))
     objeto4.addProperty("internacional", JsonBoolean(false))
     jsonArray.addItem(objeto4)
+
+    var jsonArray2 = JsonArray()
+    var objeto44 = JsonObject()
+    objeto44.addProperty("numero", JsonNumber(1))
+    objeto44.addProperty("nome", JsonString("Dave Farleyasd"))
+    objeto44.addProperty("internacional", JsonBoolean(true))
+    jsonArray2.addItem(objeto44)
+    objeto4.addProperty("subInscrito", jsonArray2)
 
     objecto.addProperty("inscritos", jsonArray)
     return objecto
