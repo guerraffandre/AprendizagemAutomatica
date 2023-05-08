@@ -135,7 +135,12 @@ class JsonString(private val value: String) : JsonValue() {
 
 class JsonObject : JsonValue() {
     val properties = mutableMapOf<String, JsonValue>()
+
     fun addProperty(name: String, value: JsonValue) {
+        properties[name] = value
+    }
+
+    fun updateValue(name: String, value: JsonValue) {
         properties[name] = value
     }
 
