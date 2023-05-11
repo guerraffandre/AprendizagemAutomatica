@@ -1,4 +1,4 @@
-import jsonlibrary.*
+/*import jsonlibrary.*
 import jsonlibrary.StudentType
 import java.awt.Component
 import java.awt.Dimension
@@ -77,7 +77,7 @@ class Editor {
                                     depth + 1
                                 )
                             } else {
-                                add(testWidget(indentedKey, item.toJsonString(), it.value.id, it))
+                                add(testWidget(it))
                             }
                         }
                     } else if (it.value is JsonObject) {
@@ -86,7 +86,7 @@ class Editor {
                             depth + 1
                         )
                     } else {
-                        add(testWidget(indentedKey, it.value.toJsonString(), it.value.id, it))
+                        add(testWidget(it))
                     }
                 }
             }
@@ -95,7 +95,7 @@ class Editor {
         }
 
 
-    fun testWidget(key: String, value: String, id: UUID, entry: Map.Entry<String, JsonValue>): JPanel =
+    fun testWidget(elVal: Map.Entry<String, JsonValue>): JPanel =
         JPanel().apply {
             layout = BoxLayout(this, BoxLayout.X_AXIS)
             alignmentX = Component.LEFT_ALIGNMENT
@@ -108,9 +108,10 @@ class Editor {
                         val menu = JPopupMenu("Message")
                         val add = JButton("add")
                         add.addActionListener {
+                            println(elVal.key)
                             val text = JOptionPane.showInputDialog("text")
-                            theMainObject.addProperty(text, JsonString("?"))
-                            add(testWidget(text, "?", id, entry))
+                            (elVal.value as JsonObject).addProperty(text, JsonString("?"))
+                            add(testWidget(elVal))
                             menu.isVisible = false
                             revalidate()
                             frame.repaint()
@@ -131,11 +132,11 @@ class Editor {
                 }
             })
 
-            add(JLabel(key))
-            val text = JTextField(value)
+            add(JLabel(elVal.key))
+            val text = JTextField(elVal.value.toJsonString())
             text.addKeyListener(object : KeyAdapter() {
                 override fun keyReleased(e: KeyEvent?) {
-                    theMainObject.update(key, text.text)
+                    elVal.value.update(elVal.key, text.text)
                     srcArea.text = theMainObject.toJsonString()
                 }
             })
@@ -184,4 +185,4 @@ fun getObject2(): JsonObject {
 
     objecto.addProperty("inscritos", jsonArray)
     return objecto
-}
+}*/

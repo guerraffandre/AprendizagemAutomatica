@@ -1,4 +1,4 @@
-package jsonlibrary
+/*package jsonlibrary
 
 import java.util.*
 import kotlin.reflect.KClass
@@ -144,24 +144,48 @@ class JsonObject : JsonValue() {
         properties[name] = value
     }
 
-    fun update(key: String, value: String) {
-        when {
-            value.equals("null", ignoreCase = true) -> properties[key] = JsonNull()
-            value.toDoubleOrNull() != null -> properties[key] = JsonDouble(value.toDouble())
-            value.equals("true", ignoreCase = true) || value.equals("false", ignoreCase = true) -> properties[key] =
-                JsonBoolean(value.toBoolean())
+    fun update(key: String, value: String, entry: Map.Entry<String, JsonValue>): Boolean {
+        val aux: JsonValue = when {
+            value.equals("null", ignoreCase = true) -> JsonNull()
+            value.toDoubleOrNull() != null -> JsonDouble(value.toDouble())
+            value.equals("true", ignoreCase = true) || value.equals(
+                "false",
+                ignoreCase = true
+            ) -> JsonBoolean(value.toBoolean())
 
             value.startsWith("[") && value.endsWith("]") -> readJsonArray(key)
-            else -> properties[key] = JsonString(value)
+            else -> JsonString(value)
         }
+
+        var foundAux = false
+
+        val updatedProperties = properties.mapValues {
+            if (it.value.id == entry.value.id) {
+                foundAux = true
+                aux
+            } else if (it.value is JsonArray) {
+                //foundAux = (it.value as JsonArray).update(key, value, it.value)
+                it.value
+            } else {
+                it.value
+            }
+        }
+
+        if (foundAux) {
+            properties.clear()
+            properties.putAll(updatedProperties)
+        }
+
+        return foundAux
     }
 
 
-    fun readJsonArray(name: String) {
+    fun readJsonArray(name: String): JsonArray {
         val jsonArray = JsonArray()
         val objeto2 = JsonObject()
         jsonArray.addItem(objeto2)
         this.addProperty(name, jsonArray)
+        return jsonArray
     }
 
 
@@ -329,4 +353,4 @@ val KClass<*>.dataClassFields: List<KProperty<*>>
         return primaryConstructor!!.parameters.map { p ->
             declaredMemberProperties.find { it.name == p.name }!!
         }
-    }
+    }*/

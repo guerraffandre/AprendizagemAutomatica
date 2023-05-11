@@ -1,4 +1,4 @@
-package jsonlibrary
+/*package jsonlibrary
 
 import java.util.*
 import kotlin.reflect.KClass
@@ -33,8 +33,6 @@ import kotlin.reflect.full.primaryConstructor
  */
 
 abstract class JsonValue {
-    val id: UUID = UUID.randomUUID()
-
     abstract fun toJsonString(depth: Int = 0): String
 
     open fun search(
@@ -49,6 +47,28 @@ abstract class JsonValue {
     }
 
     abstract fun mapObject(o: Any): JsonValue
+    open fun update(key: String, value: String): JsonValue {
+        when {
+            value.equals("null", ignoreCase = true) -> return JsonNull()
+            value.toDoubleOrNull() != null -> return JsonDouble(value.toDouble())
+            value.equals("true", ignoreCase = true) || value.equals("false", ignoreCase = true) -> return JsonBoolean(
+                value.toBoolean()
+            )
+
+            //value.startsWith("[") && value.endsWith("]") -> return readJsonArray(key)
+            else -> return JsonString(value)
+        }
+        return JsonString(value)
+    }
+
+
+    /*fun readJsonArray(name: String): JsonArray {
+        var jsonArray = JsonArray()
+        var objeto2 = JsonObject()
+        jsonArray.addItem(objeto2)
+        this.mapObject()
+        return JsonArray
+    }*/
 
 }
 
@@ -77,7 +97,6 @@ class JsonArray : JsonValue() {
     override fun mapObject(o: Any): JsonValue {
         return JsonArray()
     }
-
 }
 
 class JsonBoolean(private val value: Boolean) : JsonValue() {
@@ -139,31 +158,11 @@ class JsonString(private val value: String) : JsonValue() {
 }
 
 class JsonObject : JsonValue() {
-    var properties = mutableMapOf<String, JsonValue>()
+    val properties = mutableMapOf<String, JsonValue>()
+
     fun addProperty(name: String, value: JsonValue) {
         properties[name] = value
     }
-
-    fun update(key: String, value: String) {
-        when {
-            value.equals("null", ignoreCase = true) -> properties[key] = JsonNull()
-            value.toDoubleOrNull() != null -> properties[key] = JsonDouble(value.toDouble())
-            value.equals("true", ignoreCase = true) || value.equals("false", ignoreCase = true) -> properties[key] =
-                JsonBoolean(value.toBoolean())
-
-            value.startsWith("[") && value.endsWith("]") -> readJsonArray(key)
-            else -> properties[key] = JsonString(value)
-        }
-    }
-
-
-    fun readJsonArray(name: String) {
-        val jsonArray = JsonArray()
-        val objeto2 = JsonObject()
-        jsonArray.addItem(objeto2)
-        this.addProperty(name, jsonArray)
-    }
-
 
     override fun toJsonString(depth: Int): String {
         val propertyStrings = properties.map { (name, value) ->
@@ -329,4 +328,4 @@ val KClass<*>.dataClassFields: List<KProperty<*>>
         return primaryConstructor!!.parameters.map { p ->
             declaredMemberProperties.find { it.name == p.name }!!
         }
-    }
+    }*/

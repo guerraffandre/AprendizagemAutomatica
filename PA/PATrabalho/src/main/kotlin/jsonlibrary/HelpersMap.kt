@@ -1,4 +1,4 @@
-import jsonlibrary.*
+/*import jsonlibrary.*
 import jsonlibrary.StudentType
 import java.awt.Component
 import java.awt.Dimension
@@ -135,7 +135,7 @@ class Editor {
             val text = JTextField(value)
             text.addKeyListener(object : KeyAdapter() {
                 override fun keyReleased(e: KeyEvent?) {
-                    theMainObject.update(key, text.text)
+                    theMainObject.update(key, text.text, entry, false)
                     srcArea.text = theMainObject.toJsonString()
                 }
             })
@@ -185,3 +185,4 @@ fun getObject2(): JsonObject {
     objecto.addProperty("inscritos", jsonArray)
     return objecto
 }
+*/
