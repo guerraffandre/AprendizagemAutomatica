@@ -1,4 +1,4 @@
-package jsonlibrary
+/*package jsonlibrary
 
 import java.util.*
 import kotlin.reflect.KClass
@@ -52,91 +52,6 @@ abstract class JsonValue {
 
 }
 
-class JsonArray : JsonValue() {
-    val items = mutableListOf<JsonValue>()
-
-    fun addItem(item: JsonValue) {
-        items.add(item)
-    }
-
-    override fun toJsonString(depth: Int): String {
-        val itemStrings = items.joinToString(",\n${"\t".repeat(depth + 1)}") { it.toJsonString(depth + 1) }
-
-        return "[\n${"\t".repeat(depth + 1)}$itemStrings\n${"\t".repeat(depth)}]"
-    }
-
-    override fun search(
-        propertyName: String,
-        propertyValue: JsonValue,
-        matchingObjects: MutableMap<String, JsonValue>
-    ): MutableMap<String, JsonValue> {
-        items.forEach { it.search(propertyName, propertyValue, matchingObjects) }
-        return matchingObjects
-    }
-
-    override fun mapObject(o: Any): JsonValue {
-        return JsonArray()
-    }
-
-}
-
-class JsonBoolean(private val value: Boolean) : JsonValue() {
-    override fun toJsonString(depth: Int): String {
-        return value.toString()
-    }
-
-    override fun mapObject(o: Any): JsonValue {
-        TODO("Not yet implemented")
-    }
-}
-
-class JsonDouble(private val value: Double) : JsonValue() {
-    override fun toJsonString(depth: Int): String {
-        return value.toString()
-    }
-
-    override fun mapObject(o: Any): JsonValue {
-        TODO("Not yet implemented")
-    }
-}
-
-class JsonNull() : JsonValue() {
-    override fun toJsonString(depth: Int): String {
-        return "null"
-    }
-
-    override fun search(
-        propertyName: String,
-        propertyValue: JsonValue,
-        matchingObjects: MutableMap<String, JsonValue>
-    ): MutableMap<String, JsonValue> {
-        return matchingObjects
-    }
-
-    override fun mapObject(o: Any): JsonValue {
-        TODO("Not yet implemented")
-    }
-}
-
-class JsonNumber(private val value: Number) : JsonValue() {
-    override fun toJsonString(depth: Int): String {
-        return value.toString()
-    }
-
-    override fun mapObject(o: Any): JsonValue {
-        TODO("Not yet implemented")
-    }
-}
-
-class JsonString(private val value: String) : JsonValue() {
-    override fun toJsonString(depth: Int): String {
-        return "\"$value\""
-    }
-
-    override fun mapObject(o: Any): JsonValue {
-        TODO("Not yet implemented")
-    }
-}
 
 class JsonObject : JsonValue() {
     var properties = mutableMapOf<String, JsonValue>()
@@ -237,6 +152,92 @@ class JsonObject : JsonValue() {
 
 }
 
+class JsonArray : JsonValue() {
+    val items = mutableListOf<JsonValue>()
+
+    fun addItem(item: JsonValue) {
+        items.add(item)
+    }
+
+    override fun toJsonString(depth: Int): String {
+        val itemStrings = items.joinToString(",\n${"\t".repeat(depth + 1)}") { it.toJsonString(depth + 1) }
+
+        return "[\n${"\t".repeat(depth + 1)}$itemStrings\n${"\t".repeat(depth)}]"
+    }
+
+    override fun search(
+        propertyName: String,
+        propertyValue: JsonValue,
+        matchingObjects: MutableMap<String, JsonValue>
+    ): MutableMap<String, JsonValue> {
+        items.forEach { it.search(propertyName, propertyValue, matchingObjects) }
+        return matchingObjects
+    }
+
+    override fun mapObject(o: Any): JsonValue {
+        return JsonArray()
+    }
+
+}
+
+class JsonBoolean(private val value: Boolean) : JsonValue() {
+    override fun toJsonString(depth: Int): String {
+        return value.toString()
+    }
+
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
+    }
+}
+
+class JsonDouble(private val value: Double) : JsonValue() {
+    override fun toJsonString(depth: Int): String {
+        return value.toString()
+    }
+
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
+    }
+}
+
+class JsonNull() : JsonValue() {
+    override fun toJsonString(depth: Int): String {
+        return "null"
+    }
+
+    override fun search(
+        propertyName: String,
+        propertyValue: JsonValue,
+        matchingObjects: MutableMap<String, JsonValue>
+    ): MutableMap<String, JsonValue> {
+        return matchingObjects
+    }
+
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
+    }
+}
+
+class JsonNumber(private val value: Number) : JsonValue() {
+    override fun toJsonString(depth: Int): String {
+        return value.toString()
+    }
+
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
+    }
+}
+
+class JsonString(private val value: String) : JsonValue() {
+    override fun toJsonString(depth: Int): String {
+        return "\"$value\""
+    }
+
+    override fun mapObject(o: Any): JsonValue {
+        TODO("Not yet implemented")
+    }
+}
+
 fun Any.isEnum(): Boolean {
     return this is Enum<*>
 }
@@ -329,4 +330,4 @@ val KClass<*>.dataClassFields: List<KProperty<*>>
         return primaryConstructor!!.parameters.map { p ->
             declaredMemberProperties.find { it.name == p.name }!!
         }
-    }
+    }*/

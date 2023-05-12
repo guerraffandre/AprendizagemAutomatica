@@ -1,4 +1,4 @@
-import jsonlibrary.*
+/*import jsonlibrary.*
 import jsonlibrary.StudentType
 import java.awt.Component
 import java.awt.Dimension
@@ -185,3 +185,4 @@ fun getObject2(): JsonObject {
     objecto.addProperty("inscritos", jsonArray)
     return objecto
 }
+*/
