@@ -1,17 +1,11 @@
 package jsonlibrary
 
 import java.util.*
-import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
-import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.primaryConstructor
-
-val identSpaces: Int = 6
 
 fun getObject(): JSONObject {
-    val student = Student(12345, "John Doe", StudentType.Bachelor)
+    val student = Student(321, 12345, "John Doe", StudentType.Bachelor)
     val json = JSONObject().mapObject(student)
     return json as JSONObject
 }
@@ -26,6 +20,19 @@ fun getObject2(): JSONObject {
                 addProperty("numero", JSONNumber(101101))
                 addProperty("nome", JSONString("Dave Farley"))
                 addProperty("internacional", JSONBoolean(true))
+                val inscritos2 = JSONArray().apply {
+                    addItem(JSONObject().apply {
+                        addProperty("asd", JSONNumber(101101))
+
+                        val inscritos3 = JSONArray().apply {
+                            addItem(JSONObject().apply {
+                                addProperty("#####", JSONNumber(101101))
+                            })
+                        }
+                        addProperty("subArray3", inscritos3)
+                    })
+                }
+                addProperty("subArray", inscritos2)
             })
             addItem(JSONObject().apply {
                 addProperty("numero", JSONNumber(101102))
@@ -44,7 +51,7 @@ fun getObject2(): JSONObject {
 }
 
 fun main() {
-    //println(json.getObject2())
+    println(getObject2().toJsonString())
 
     val propertyName = "numero"
     val propertyValue = JSONNumber(101102)
@@ -53,9 +60,9 @@ fun main() {
         //println(matchingObject.toJsonString())
     }
 
-    val student = Student(12345, "John Doe", StudentType.Bachelor)
+    val student = Student(123, 12345, "John Doe", StudentType.Bachelor)
     val json2 = JSONObject().mapObject(student)
-    println(json2.toJsonString())
+    //println(json2.toJsonString())
 }
 
 abstract class JSONValue {
@@ -117,10 +124,23 @@ class JSONObject : JSONValue() {
 
     override fun toJsonString(indent: Int): String {
         val sb = StringBuilder()
-        sb.append("${addIndentation(indent)}{\n")
+        sb.append(
+            "${
+                addIndentation(
+                    if (indent > 0) 4 else 0
+                )
+            }{\n"
+        )
         for ((name, value) in properties) {
-            sb.append("${addIndentation(indent + 2)}\"$name\": ${value.toJsonString()}")
+            sb.append(
+                "${addIndentation(indent + 4)}\"$name\": ${
+                    if (value is JSONArray) value.toJsonString(
+                        indent
+                    ) else value.toJsonString()
+                }"
+            )
             sb.append(",\n")
+
         }
         if (properties.isNotEmpty()) {
             sb.setLength(sb.length - 2) // remove last comma and newline
@@ -183,13 +203,16 @@ class JSONArray : JSONValue() {
 
     override fun toJsonString(indent: Int): String {
         val sb = StringBuilder()
-        sb.append("${addIndentation(indent)}[")
-        if (items.isNotEmpty()) {
-            sb.append("\n")
-            sb.append(items.joinToString(",\n") { it.toJsonString(indent + identSpaces) })
-            sb.append("\n${addIndentation(indent)}")
+        sb.append("${addIndentation(0)}[\n")
+        for (item in items) {
+            sb.append("${addIndentation(indent + 4)}${item.toJsonString(indent + 8)}")
+            sb.append(",\n")
         }
-        sb.append("${addIndentation(indent + identSpaces / 2)}]")
+        if (items.isNotEmpty()) {
+            sb.setLength(sb.length - 2) // remove last comma and newline
+            sb.append('\n')
+        }
+        sb.append("${addIndentation(indent + 4)}]")
         return sb.toString()
     }
 
@@ -271,46 +294,25 @@ private fun addIndentation(indent: Int): String {
 //########################################################
 //########################################################
 
-@Target(AnnotationTarget.CLASS, AnnotationTarget.PROPERTY)
-annotation class DbName(val name: String)
-
-@Target(AnnotationTarget.PROPERTY)
-annotation class PrimaryKey
-
 @Target(AnnotationTarget.PROPERTY)
 annotation class Exclude
 
 @Target(AnnotationTarget.PROPERTY)
 annotation class ToString
 
-
-@Target(AnnotationTarget.PROPERTY)
-annotation class Length(val length: Int)
-
-
-@Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.PROPERTY)
 annotation class ChangeName(val name: String)
 
 data class Student(
-    //@Exclude
-    @ChangeName("student_id")
+    @Exclude
+    val number2: Int,
     @ToString
     val number: Int,
-    @Length(50)
     val name: String,
-    @DbName("degree")
+    @ChangeName("student_id")
     val type: StudentType
 )
 
 enum class StudentType {
     Bachelor, Master, Doctoral
 }
-
-val KClass<*>.dataClassFields: List<KProperty<*>>
-    get() {
-        require(isData) { "instance must be data class" }
-        return primaryConstructor!!.parameters.map { p ->
-            declaredMemberProperties.find { it.name == p.name }!!
-        }
-    }
