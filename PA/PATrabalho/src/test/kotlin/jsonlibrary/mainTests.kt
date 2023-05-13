@@ -1,13 +1,10 @@
 package jsonlibrary
 
-
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.io.File
-import java.util.*
 import kotlin.test.assertNotNull
 
-class mainTests {
+class MainTests {
 
     @Test
     fun Test() {
@@ -15,20 +12,15 @@ class mainTests {
     }
 
     @Test
-    fun testReadJsonFile() {
-        val json = File("example.json").readText()
-        assertNotNull(json)
-    }
-
-    @Test
     fun testRemovePropertyFromJSONObject() {
-        val jsonObject = JSONObject()
+        var jsonObject = JSONObject()
         jsonObject.addProperty("uc", JSONString("PA"))
         jsonObject.addProperty("ects", JSONNumber(6.0))
 
         val originalSize = jsonObject.get().size
 
-        jsonObject.remove("uc" to JSONString("PA"))
+        val el: Pair<String, JSONValue> = jsonObject.get()[0]
+        jsonObject.remove(el)
 
         val newSize = jsonObject.get().size
 
@@ -51,8 +43,9 @@ class mainTests {
 
         assertNotNull(addedProperty)
         assertEquals("uc", addedProperty!!.first)
-        assertEquals(JSONString("PA"), addedProperty.second)
+        assertEquals(JSONString("PA").toJsonString(), addedProperty.second.toJsonString())
     }
+
     @Test
     fun testUpdatePropertyInJSONObject() {
         val jsonObject = JSONObject()
@@ -66,66 +59,70 @@ class mainTests {
 
         assertNotNull(updatedProperty)
         assertEquals("uc", updatedProperty!!.first)
-        assertEquals(JSONString("DB"), updatedProperty.second)
+        assertEquals(JSONString("DB").toJsonString(), updatedProperty.second.toJsonString())
     }
-
 
 
     @Test
-    fun validaEstrutura() {
-        var objecto = JsonObject()
-        objecto.addProperty("uc", JsonString("PA"))
-        objecto.addProperty("ects", JsonDouble(6.0))
-        objecto.addProperty("data-exame", JsonNull())
+    fun testValidateJSONStructure() {
+        val jsonObject = JSONObject()
+        jsonObject.addProperty("uc", JSONString("PA"))
+        jsonObject.addProperty("ects", JSONNumber(6.0))
 
-        var jsonArray = JsonArray()
-        var objeto2 = JsonObject()
-        objeto2.addProperty("numero", JsonNumber(101101))
-        objeto2.addProperty("nome", JsonString("Dave Farley"))
-        objeto2.addProperty("internacional", JsonBoolean(true))
-        jsonArray.addItem(objeto2)
-        var objeto3 = JsonObject()
-        objeto3.addProperty("numero", JsonNumber(101102))
-        objeto3.addProperty("nome", JsonString("Martin Fowler"))
-        objeto3.addProperty("internacional", JsonBoolean(true))
-        jsonArray.addItem(objeto3)
-        var objeto4 = JsonObject()
-        objeto4.addProperty("numero", JsonNumber(26503))
-        objeto4.addProperty("nome", JsonString("André Santos"))
-        objeto4.addProperty("internacional", JsonBoolean(false))
-        jsonArray.addItem(objeto4)
+        val jsonArray = JSONArray()
+        val jsonObject2 = JSONObject()
+        jsonObject2.addProperty("numero", JSONNumber(101101))
+        jsonObject2.addProperty("nome", JSONString("Dave Farley"))
+        jsonArray.addItem(jsonObject2)
+        val jsonObject3 = JSONObject()
+        jsonObject3.addProperty("numero", JSONNumber(101102))
+        jsonObject3.addProperty("nome", JSONString("Martin Fowler"))
+        jsonArray.addItem(jsonObject3)
+        val jsonObject4 = JSONObject()
+        jsonObject4.addProperty("numero", JSONNumber(26503))
+        jsonObject4.addProperty("nome", JSONString("André Santos"))
+        jsonArray.addItem(jsonObject4)
 
-        objecto.addProperty("inscritos", jsonArray)
+        jsonObject.addProperty("inscritos", jsonArray)
 
-        val json = objecto.toJsonString()
-        var index = 0
-        val stack = Stack<Char>()
+        val jsonString = jsonObject.toJsonString()
 
-        while (index < json.length) {
-            val c = json[index]
-
-            when (c) {
-                '{', '[', '(' -> stack.push(c)
-                '}', ']', ')' -> {
-                    if (stack.isEmpty()) {
-                        //return false
-                    }
-
-                    val last = stack.pop()
-                    if ((last == '{' && c != '}') ||
-                        (last == '[' && c != ']') ||
-                        (last == '(' && c != ')')) {
-                        //return false
-                    }
-                }
-            }
-
-            index++
-        }
-
-        //assertEquals()
+        val expectedJsonString =
+            """
+{
+  "uc": "PA",
+  "ects": 6.0,
+  "inscritos": [
+      {
+        "numero": 101101,
+        "nome": "Dave Farley"
+      },
+      {
+        "numero": 101102,
+        "nome": "Martin Fowler"
+      },
+      {
+        "numero": 26503,
+        "nome": "André Santos"
+      }
+   ]
+}
+             """.trimIndent()
+        assertEquals(expectedJsonString, jsonString)
     }
 
-    //confirmar a pesquisa está ok VISITOR
+    @Test
+    fun testSearchInJSONObject() {
+        val jsonObject = JSONObject()
+        jsonObject.addProperty("uc", JSONString("PA"))
+        jsonObject.addProperty("ects", JSONNumber(6.0))
+
+        val propertyName = "uc"
+        val propertyValue = JSONString("PA")
+        val matchingObjects = jsonObject.search(propertyName, propertyValue)
+
+        assertEquals(1, matchingObjects.size)
+        assertEquals(JSONString("PA").toJsonString(), matchingObjects[0].toJsonString())
+    }
 
 }

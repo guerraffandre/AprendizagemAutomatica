@@ -53,7 +53,6 @@ fun main() {
         //println(matchingObject.toJsonString())
     }
 
-    //2 fase
     val student = Student(12345, "John Doe", StudentType.Bachelor)
     val json2 = JSONObject().mapObject(student)
     println(json2.toJsonString())
@@ -209,7 +208,6 @@ class JSONArray : JSONValue() {
         return JSONArray()
     }
 }
-
 
 class JSONNull : JSONValue() {
     override fun toJsonString(indent: Int): String {
