@@ -19,6 +19,58 @@ class mainTests {
         val json = File("example.json").readText()
         assertNotNull(json)
     }
+
+    @Test
+    fun testRemovePropertyFromJSONObject() {
+        val jsonObject = JSONObject()
+        jsonObject.addProperty("uc", JSONString("PA"))
+        jsonObject.addProperty("ects", JSONNumber(6.0))
+
+        val originalSize = jsonObject.get().size
+
+        jsonObject.remove("uc" to JSONString("PA"))
+
+        val newSize = jsonObject.get().size
+
+        assertEquals(originalSize - 1, newSize)
+    }
+
+    @Test
+    fun testAddPropertyToJSONObject() {
+        val jsonObject = JSONObject()
+
+        val originalSize = jsonObject.get().size
+
+        jsonObject.addProperty("uc", JSONString("PA"))
+
+        val newSize = jsonObject.get().size
+
+        assertEquals(originalSize + 1, newSize)
+
+        val addedProperty = jsonObject.get().find { it.first == "uc" }
+
+        assertNotNull(addedProperty)
+        assertEquals("uc", addedProperty!!.first)
+        assertEquals(JSONString("PA"), addedProperty.second)
+    }
+    @Test
+    fun testUpdatePropertyInJSONObject() {
+        val jsonObject = JSONObject()
+
+        jsonObject.addProperty("uc", JSONString("PA"))
+        jsonObject.addProperty("ects", JSONNumber(6.0))
+
+        jsonObject.update("uc", "DB")
+
+        val updatedProperty = jsonObject.get().find { it.first == "uc" }
+
+        assertNotNull(updatedProperty)
+        assertEquals("uc", updatedProperty!!.first)
+        assertEquals(JSONString("DB"), updatedProperty.second)
+    }
+
+
+
     @Test
     fun validaEstrutura() {
         var objecto = JsonObject()
